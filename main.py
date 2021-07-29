@@ -15,7 +15,7 @@ GREEN_ALIEN = pygame.image.load(os.path.join("assets", "alien-green.png"))
 RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
 
 # Nave do jogador
-YELLOW_SHIP = pygame.image.load(os.path.join("assets", "ship_yellow.png"))
+YELLOW_SHIP = pygame.image.load(os.path.join("assets", "yellow_ship.png"))
 
 # Lasers
 RED_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_red.png"))
