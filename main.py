@@ -4,7 +4,7 @@ import time
 import random
 pygame.font.init()
 
-WIDTH, HEIGHT = 750, 750
+WIDTH, HEIGHT = 700, 700
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Atire neles!")
 
@@ -39,6 +39,12 @@ class Item:
     
     def draw(self, window):
         window.blit(self.ship_img, (self.x, self.y))
+    #Obter largura e altura do item
+    def get_width(self):
+        return self.ship_img.get_width()
+
+    def get_height(self):
+        return self.ship_img.get_height()
 
 
 #Player - Herdando a classe Item
@@ -52,6 +58,23 @@ class Player(Item):
 
 
 
+class Alien(Item):
+
+    #dicionário de cores
+    COLOR_ALIEN = {
+        "red": (RED_ALIEN, RED_LASER),
+        "green": (GREEN_ALIEN, GREEN_LASER),
+        "blue": (BLUE_ALIEN, BLUE_LASER)
+    }
+
+    def __init__(self, x, y, color, health=100):
+        super().__init__(x, y, health)
+        self.ship_img, self.laser_img = self.COLOR_ALIEN[color]
+        self.mask = pygame.mask.from_surface(self.ship_img)
+
+
+
+
 
 def main():
     run = True
@@ -61,7 +84,7 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 50)
     velocidade_jogador = 5
 
-    player = Player(300,650)
+    player = Player(300,600)
 
     clock = pygame.time.Clock()
 
@@ -90,11 +113,11 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player.x - velocidade_jogador > 0: #esquerda
             player.x -= velocidade_jogador
-        if keys[pygame.K_RIGHT] and player.x + velocidade_jogador + 80< WIDTH: #direita
+        if keys[pygame.K_RIGHT] and player.x + velocidade_jogador +  player.get_width() < WIDTH: #direita
             player.x += velocidade_jogador
         if keys[pygame.K_UP] and player.y - velocidade_jogador > 0: #para cima
             player.y -= velocidade_jogador
-        if keys[pygame.K_DOWN] and player.y + velocidade_jogador + 80<HEIGHT: #para baixo
+        if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
         
 main()
