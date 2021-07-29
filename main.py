@@ -28,6 +28,8 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background
 
 #Classe abstrata para criar itens (aliens e nave)
 class Item:
+    COOLDOWN = 30
+
     def __init__(self, x, y, health=100):
         self.x = x
         self.y = y
@@ -45,6 +47,18 @@ class Item:
 
     def get_height(self):
         return self.ship_img.get_height()
+
+    def cooldown(self):
+        if self.cool_down_counter >= self.COOLDOWN:
+            self.cool_down_counter = 0
+        elif self.cool_down_counter > 0:
+            self.cool_down_counter += 1
+
+    def atirar(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x, self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
 
 
 #Player - Herdando a classe Item
