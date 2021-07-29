@@ -76,6 +76,32 @@ class Alien(Item):
         self.y += vel
 
 
+class Laser:
+    def __init__(self, x, y, img):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
+
+    def draw(self, window):
+        window.blit(self.img, (self.x, self.y))
+
+    def move(self, vel):
+        self.y += vel
+
+    #Retorna se o laser saiu da janela do jogo
+    def fora_janela(self, height):
+        return self.y < height and self.y >= 0
+
+    def colisao(self, obj):
+        return colidir(self, obj)
+
+#Colisão dos objetos de acordo com os pixels preenchidos das imagens
+def colidir(obj1, obj2):
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+
 
 def main():
     run = True
