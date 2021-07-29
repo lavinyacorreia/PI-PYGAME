@@ -142,6 +142,10 @@ def main():
 
         for inimigo in inimigos:
             inimigo.move(velocidade_inimigo)
+            #se o alien estiver fora da tela - remover
+            if inimigo.y + inimigo.get_height() > HEIGHT:
+                lives -=1
+                inimigos.remove(inimigo)
 
 
         redraw_window()
