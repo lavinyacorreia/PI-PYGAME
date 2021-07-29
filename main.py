@@ -72,6 +72,8 @@ class Alien(Item):
         self.ship_img, self.laser_img = self.COLOR_ALIEN[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
 
+    def move(self, vel):
+        self.y += vel
 
 
 
@@ -83,6 +85,11 @@ def main():
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
     velocidade_jogador = 5
+
+    #aliens
+    inimigos = []
+    onda_inimigos = 5
+    velocidade_inimigo = 1
 
     player = Player(300,600)
 
@@ -97,12 +104,24 @@ def main():
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
 
+        for inimigo in inimigos:
+            inimigo.draw(WIN)
+
         player.draw(WIN)
+
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
-        redraw_window()
+       
+        if len(inimigos) == 0:
+            level += 1
+            onda_inimigos += 3
+            #Todos os aliens com mesma velocidade, porém com posições iniciais diferentes
+            for i in range(onda_inimigos):
+                inimigo = Alien(random.randrange(50, WIDTH-100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
+                inimigos.append(inimigo)
+
 
         #Fechar o programa
         for event in pygame.event.get():
@@ -119,5 +138,12 @@ def main():
             player.y -= velocidade_jogador
         if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
+
+
+        for inimigo in inimigos:
+            inimigo.move(velocidade_inimigo)
+
+
+        redraw_window()
         
 main()
