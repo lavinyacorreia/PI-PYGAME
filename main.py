@@ -90,11 +90,11 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player.x - velocidade_jogador > 0: #esquerda
             player.x -= velocidade_jogador
-        if keys[pygame.K_RIGHT] and player.x + velocidade_jogador + 50< WIDTH: #direita
+        if keys[pygame.K_RIGHT] and player.x + velocidade_jogador + 80< WIDTH: #direita
             player.x += velocidade_jogador
         if keys[pygame.K_UP] and player.y - velocidade_jogador > 0: #para cima
             player.y -= velocidade_jogador
-        if keys[pygame.K_DOWN] and player.y + velocidade_jogador + 50<HEIGHT: #para baixo
+        if keys[pygame.K_DOWN] and player.y + velocidade_jogador + 80<HEIGHT: #para baixo
             player.y += velocidade_jogador
         
 main()
