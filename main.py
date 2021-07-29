@@ -38,9 +38,8 @@ class Item:
         self.cool_down_counter = 0
     
     def draw(self, window):
-        window.blit(self.ship_img, (self.x, self.y))
-        for laser in self.lasers:
-            laser.draw(window)
+        #desenho de um retângulo para teste 
+        pygame.draw.rect(window, (255, 0, 0), (self.x, self.y, 50, 50))
 
 
 def main():
@@ -49,6 +48,7 @@ def main():
     level = 1
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
+    velocidade_jogador = 5
 
     ship = Item(300,650)
 
@@ -74,6 +74,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-           
-
+        
+        #Ação dos botões
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]: #esquerda
+            ship.x -= velocidade_jogador
+        if keys[pygame.K_RIGHT]: #direita
+            ship.x += velocidade_jogador
+        if keys[pygame.K_UP]: #para cima
+            ship.y -= velocidade_jogador
+        if keys[pygame.K_DOWN]: #para baixo
+            ship.y += velocidade_jogador
+        
 main()
