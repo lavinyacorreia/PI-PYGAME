@@ -77,13 +77,13 @@ def main():
         
         #Ação dos botões
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]: #esquerda
+        if keys[pygame.K_LEFT] and ship.x - velocidade_jogador > 0: #esquerda
             ship.x -= velocidade_jogador
-        if keys[pygame.K_RIGHT]: #direita
+        if keys[pygame.K_RIGHT] and ship.x + velocidade_jogador < WIDTH: #direita
             ship.x += velocidade_jogador
-        if keys[pygame.K_UP]: #para cima
+        if keys[pygame.K_UP] and ship.y - velocidade_jogador > 0: #para cima
             ship.y -= velocidade_jogador
-        if keys[pygame.K_DOWN]: #para baixo
+        if keys[pygame.K_DOWN] and ship.y + velocidade_jogador <HEIGHT: #para baixo
             ship.y += velocidade_jogador
         
 main()
