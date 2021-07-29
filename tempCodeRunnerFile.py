@@ -1,0 +1,1 @@
+ onda_inimigos = 5

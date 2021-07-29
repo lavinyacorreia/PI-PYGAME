@@ -12,7 +12,7 @@ pygame.display.set_caption("Atire neles!")
 RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
 BLUE_ALIEN = pygame.image.load(os.path.join("assets", "alien-blue.png"))
 GREEN_ALIEN = pygame.image.load(os.path.join("assets", "alien-green.png"))
-RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
+
 
 # Nave do jogador
 YELLOW_SHIP = pygame.image.load(os.path.join("assets", "yellow_ship.png"))
@@ -77,21 +77,23 @@ class Alien(Item):
 
 
 
-
 def main():
     run = True
     FPS = 60
-    level = 1
+    level = 0
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
+    perdeu_font = pygame.font.SysFont("comicsans", 60)
     velocidade_jogador = 5
+    perdeu = False
+    perdeu_conta = 0
 
     #aliens
     inimigos = []
     onda_inimigos = 5
     velocidade_inimigo = 1
 
-    player = Player(300,600)
+    player = Player(300, 600)
 
     clock = pygame.time.Clock()
 
@@ -109,16 +111,34 @@ def main():
 
         player.draw(WIN)
 
+        if perdeu:
+            perdeu_label = perdeu_font.render("Você perdeu", 1, (255,255,255))
+            WIN.blit(perdeu_label, (WIDTH/2 - perdeu_label.get_width()/2, 350))
+            
+
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
+        redraw_window()
+
+        if lives <= 0 or player.health <= 0:
+            perdeu = True
+            perdeu_conta += 1
+        
+        #Fechar o jogo após perda e contagem de 3 segundos
+        if perdeu:
+            if perdeu_conta > FPS * 3:
+                run = False
+            else:
+                continue
        
         if len(inimigos) == 0:
             level += 1
             onda_inimigos += 3
             #Todos os aliens com mesma velocidade, porém com posições iniciais diferentes
             for i in range(onda_inimigos):
+                # __init__(self, x, y, color, health=100):
                 inimigo = Alien(random.randrange(50, WIDTH-100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
                 inimigos.append(inimigo)
 
@@ -148,6 +168,5 @@ def main():
                 inimigos.remove(inimigo)
 
 
-        redraw_window()
         
 main()
