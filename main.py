@@ -41,6 +41,19 @@ class Item:
     
     def draw(self, window):
         window.blit(self.ship_img, (self.x, self.y))
+        for laser in self.lasers:
+            laser.draw(window)
+
+    def mover_lasers(self, vel, obj):
+        self.cooldown()
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.off_screen(HEIGHT):
+                self.lasers.remove(laser)
+            elif laser.collision(obj):
+                obj.health -= 10
+                self.lasers.remove(laser)
+
     #Obter largura e altura do item
     def get_width(self):
         return self.ship_img.get_width()
@@ -198,6 +211,8 @@ def main():
             player.y -= velocidade_jogador
         if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
+        if keys[pygame.K_SPACE]: #atirar
+            player.shoot()
 
 
         for inimigo in inimigos:
