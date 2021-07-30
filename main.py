@@ -114,6 +114,12 @@ class Alien(Item):
 
     def move(self, vel):
         self.y += vel
+    
+    def atirar(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x-25, self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
 
 
 class Laser:
@@ -202,7 +208,7 @@ def main():
        
         if len(inimigos) == 0:
             level += 1
-            onda_inimigos += 3
+            onda_inimigos += 5
             #Todos os aliens com mesma velocidade, porém com posições iniciais diferentes
             for i in range(onda_inimigos):
                 # __init__(self, x, y, color, health=100):
@@ -228,10 +234,17 @@ def main():
         if keys[pygame.K_SPACE]: #atirar
             player.atirar()
 
-
         for inimigo in inimigos:
             inimigo.move(velocidade_inimigo)
             inimigo.move_lasers(laser_vel, player)
+            #Alien atira na nave
+            if random.randrange(0, 4*60) == 1:
+                inimigo.atirar()
+
+            if colidir(inimigo, player):
+                player.health -= 10
+                inimigos.remove(inimigo)
+                
             #se o alien estiver fora da tela - remover
             if inimigo.y + inimigo.get_height() > HEIGHT:
                 lives -=1
