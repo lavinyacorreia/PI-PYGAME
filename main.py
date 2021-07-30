@@ -97,6 +97,13 @@ class Player(Item):
                         if laser in self.lasers:
                             self.lasers.remove(laser)
 
+    def draw(self, window):
+        super().draw(window)
+        self.healthbar(window)
+    #Barra de vida da nave espacial
+    def healthbar(self, window):
+        pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+        pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health), 10))
 
 class Alien(Item):
 
@@ -166,7 +173,7 @@ def main():
     onda_inimigos = 5
     velocidade_inimigo = 1
 
-    player = Player(300, 600)
+    player = Player(300, 575)
 
     clock = pygame.time.Clock()
 
@@ -244,7 +251,7 @@ def main():
             if colidir(inimigo, player):
                 player.health -= 10
                 inimigos.remove(inimigo)
-                
+
             #se o alien estiver fora da tela - remover
             if inimigo.y + inimigo.get_height() > HEIGHT:
                 lives -=1
