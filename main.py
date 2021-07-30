@@ -1,3 +1,4 @@
+ 
 import pygame
 import os
 import time
@@ -44,13 +45,13 @@ class Item:
         for laser in self.lasers:
             laser.draw(window)
 
-    def mover_lasers(self, vel, obj):
+    def move_lasers(self, vel, obj):
         self.cooldown()
         for laser in self.lasers:
             laser.move(vel)
-            if laser.off_screen(HEIGHT):
+            if laser.fora_janela(HEIGHT):
                 self.lasers.remove(laser)
-            elif laser.collision(obj):
+            elif laser.colisao(obj):
                 obj.health -= 10
                 self.lasers.remove(laser)
 
@@ -83,6 +84,18 @@ class Player(Item):
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health=health
 
+    def move_lasers(self, vel, objs):
+        self.cooldown()
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.fora_janela(HEIGHT):
+                self.lasers.remove(laser)
+            else:
+                for obj in objs:
+                    if laser.colisao(obj):
+                        objs.remove(obj)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
 
 
 class Alien(Item):
@@ -118,7 +131,7 @@ class Laser:
 
     #Retorna se o laser saiu da janela do jogo
     def fora_janela(self, height):
-        return self.y < height and self.y >= 0
+        return not(self.y < height and self.y >= 0)
 
     def colisao(self, obj):
         return colidir(self, obj)
@@ -141,6 +154,7 @@ def main():
     perdeu = False
     perdeu_conta = 0
 
+    laser_vel =4
     #aliens
     inimigos = []
     onda_inimigos = 5
@@ -212,16 +226,18 @@ def main():
         if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
         if keys[pygame.K_SPACE]: #atirar
-            player.shoot()
+            player.atirar()
 
 
         for inimigo in inimigos:
             inimigo.move(velocidade_inimigo)
+            inimigo.move_lasers(laser_vel, player)
             #se o alien estiver fora da tela - remover
             if inimigo.y + inimigo.get_height() > HEIGHT:
                 lives -=1
                 inimigos.remove(inimigo)
 
+        player.move_lasers(-laser_vel, inimigos)
 
         
 main()
