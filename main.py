@@ -14,7 +14,6 @@ RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
 BLUE_ALIEN = pygame.image.load(os.path.join("assets", "alien-blue.png"))
 GREEN_ALIEN = pygame.image.load(os.path.join("assets", "alien-green.png"))
 
-
 # Nave do jogador
 YELLOW_SHIP = pygame.image.load(os.path.join("assets", "yellow_ship.png"))
 
@@ -26,6 +25,37 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 
 # Plano de fundo
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+
+
+#Botão inicial
+class button():
+    def __init__(self, color, x,y,width,height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self,WIN,outline=None):
+        #Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(WIN, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            
+        pygame.draw.rect(WIN, self.color, (self.x,self.y,self.width,self.height),0)
+        
+        if self.text != '':
+            font = pygame.font.SysFont('comicsans', 60)
+            text = font.render(self.text, 1, (0,0,0))
+            WIN.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+
+    def isOver(self, pos):
+        #Pos is the mouse position or a tuple of (x,y) coordinates
+        if pos[0] > self.x and pos[0] < self.x + self.width:
+            if pos[1] > self.y and pos[1] < self.y + self.height:
+                return True
+            
+        return False
 
 #Classe abstrata para criar itens (aliens e nave)
 class Item:
@@ -149,6 +179,7 @@ class Laser:
     def colisao(self, obj):
         return colidir(self, obj)
 
+
 #Colisão dos objetos de acordo com os pixels preenchidos das imagens
 def colidir(obj1, obj2):
     offset_x = obj2.x - obj1.x
@@ -163,15 +194,15 @@ def main():
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
     perdeu_font = pygame.font.SysFont("comicsans", 60)
-    velocidade_jogador = 5
+    velocidade_jogador = 6
     perdeu = False
     perdeu_conta = 0
 
-    laser_vel =4
+    laser_vel =5
     #aliens
     inimigos = []
     onda_inimigos = 5
-    velocidade_inimigo = 1
+    velocidade_inimigo = 2
 
     player = Player(300, 575)
 
@@ -197,7 +228,7 @@ def main():
             
 
         pygame.display.update()
-
+   
     while run:
         clock.tick(FPS)
         redraw_window()
@@ -260,18 +291,48 @@ def main():
         player.move_lasers(-laser_vel, inimigos)
 
 def main_menu():
-    title_font = pygame.font.SysFont("comicsans", 70)
     run = True
+    BotaoVerde = button((0,255,0), 275, 455, 150, 100, 'PLAY')
+    title_font = pygame.font.SysFont("comicsans", 40)
     while run:
         WIN.blit(BG, (0,0))
-        title_label = title_font.render("Clique na tela para começar!", 1, (255,255,255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
-        pygame.display.update()
+
+        title_label = title_font.render("REGRAS DO JOGO", 1, (255,255,255))
+        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 100))
+
+        title_label2 = title_font.render("1.ATIRE NELES! Pressione a barra de espaço", 1, (255,255,255))
+        WIN.blit(title_label2, (WIDTH/2 - title_label2.get_width()/2, 150))
+
+        title_label3 = title_font.render("2.MOVA-SE! Utilize as setas de direção", 1, (255,255,255))
+        WIN.blit(title_label3, (WIDTH/2 - title_label3.get_width()/2, 200))
+
+        title_label4 = title_font.render("3.CUIDADO! Laser causa dano na espacionave", 1, (255,255,255))
+        WIN.blit(title_label4, (WIDTH/2 - title_label4.get_width()/2, 250))
+
+        title_label5 = title_font.render("4.ATENÇÃO! Se Alien passar, você perde ponto", 1, (255,255,255))
+        WIN.blit(title_label5, (WIDTH/2 - title_label5.get_width()/2, 300))
+
+        title_label6 = title_font.render("5.PERDEU! Pontos ou barra de vida zerado", 1, (255,255,255))
+        WIN.blit(title_label6, (WIDTH/2 - title_label6.get_width()/2, 350))
+
+        title_label6 = title_font.render("6.PRÓXIMO NÍVEL! O número de aliens aumenta", 1, (255,255,255))
+        WIN.blit(title_label6, (WIDTH/2 - title_label6.get_width()/2, 400))
+
+        BotaoVerde.draw(WIN, (200,0,0))
+        pygame.display.update() 
+
         for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                main()
+            if BotaoVerde.isOver(pos):
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    main()
+            if event.type == pygame.MOUSEMOTION:
+                if BotaoVerde.isOver(pos):
+                    BotaoVerde.color = (255,0,0)
+                else:
+                    BotaoVerde.color = (0,187,45)
     pygame.quit()
 
 main_menu()
