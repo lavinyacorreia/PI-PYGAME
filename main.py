@@ -7,7 +7,7 @@ pygame.font.init()
 
 WIDTH, HEIGHT = 700, 700
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Atire neles!")
+pygame.display.set_caption("Invasão ao planeta PI")
 
 # Imagens - aliens
 RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
@@ -193,7 +193,8 @@ def main():
     level = 0
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
-    perdeu_font = pygame.font.SysFont("comicsans", 60)
+    perdeu_font = pygame.font.SysFont("serif", 25)
+
     velocidade_jogador = 6
     perdeu = False
     perdeu_conta = 0
@@ -212,7 +213,7 @@ def main():
     def redraw_window():
         WIN.blit(BG, (0,0))
         #Texto
-        lives_label = main_font.render(f"Vidas: {lives}", 1, (255,255,255))
+        lives_label = main_font.render(f"Invasões: {lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255,255,255))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
@@ -223,7 +224,10 @@ def main():
         player.draw(WIN)
 
         if perdeu:
-            perdeu_label = perdeu_font.render("Você perdeu", 1, (255,255,255))
+            perdeu_label2 = main_font.render("VOCÊ PERDEU!", 1, (255,255,255))
+            WIN.blit(perdeu_label2, (WIDTH/2 - perdeu_label2.get_width()/2, 300))
+            
+            perdeu_label = perdeu_font.render("- Sempre foi mais fácil destruir do que criar.", 1, (255,255,255))
             WIN.blit(perdeu_label, (WIDTH/2 - perdeu_label.get_width()/2, 350))
             
 
@@ -292,33 +296,37 @@ def main():
 
 def main_menu():
     run = True
-    BotaoVerde = button((0,255,0), 275, 455, 150, 100, 'PLAY')
-    title_font = pygame.font.SysFont("comicsans", 40)
+    BotaoVerde = button((0,255,0), 275, 480, 150, 100, 'PLAY')
+    title_font = pygame.font.SysFont("comicsans", 35)
+    title_font2 = pygame.font.SysFont("serif", 35)
     while run:
         WIN.blit(BG, (0,0))
 
         title_label = title_font.render("REGRAS DO JOGO", 1, (255,255,255))
         WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 100))
 
-        title_label2 = title_font.render("1.ATIRE NELES! Pressione a barra de espaço", 1, (255,255,255))
+        title_label2 = title_font.render("1.ATIRE NELES! Pressione a barra de espaço.", 1, (255,255,255))
         WIN.blit(title_label2, (WIDTH/2 - title_label2.get_width()/2, 150))
 
-        title_label3 = title_font.render("2.MOVA-SE! Utilize as setas de direção", 1, (255,255,255))
+        title_label3 = title_font.render("2.MOVA-SE! Utilize as setas de direção.", 1, (255,255,255))
         WIN.blit(title_label3, (WIDTH/2 - title_label3.get_width()/2, 200))
 
-        title_label4 = title_font.render("3.CUIDADO! Laser causa dano na espacionave", 1, (255,255,255))
+        title_label4 = title_font.render("3.CUIDADO! Laser causa dano na espacionave.", 1, (255,255,255))
         WIN.blit(title_label4, (WIDTH/2 - title_label4.get_width()/2, 250))
 
-        title_label5 = title_font.render("4.ATENÇÃO! Se Alien passar, você perde ponto", 1, (255,255,255))
+        title_label5 = title_font.render("4.ATENÇÃO! Limite de invasões: 5 aliens.", 1, (255,255,255))
         WIN.blit(title_label5, (WIDTH/2 - title_label5.get_width()/2, 300))
 
-        title_label6 = title_font.render("5.PERDEU! Pontos ou barra de vida zerado", 1, (255,255,255))
+        title_label6 = title_font.render("5.PERDEU! Invasões ou barra de vida zerados.", 1, (255,255,255))
         WIN.blit(title_label6, (WIDTH/2 - title_label6.get_width()/2, 350))
 
-        title_label6 = title_font.render("6.PRÓXIMO NÍVEL! O número de aliens aumenta", 1, (255,255,255))
+        title_label6 = title_font.render("6.PRÓXIMO NÍVEL! O número de aliens aumenta.", 1, (255,255,255))
         WIN.blit(title_label6, (WIDTH/2 - title_label6.get_width()/2, 400))
 
-        BotaoVerde.draw(WIN, (200,0,0))
+        title_label7 = title_font2.render("- Vida longa e próspera.", 1, (255,255,255))
+        WIN.blit(title_label7, (WIDTH/1.5 - title_label7.get_width()/2, 640))
+
+        BotaoVerde.draw(WIN, (0,0,0))
         pygame.display.update() 
 
         for event in pygame.event.get():
@@ -330,9 +338,9 @@ def main_menu():
                     main()
             if event.type == pygame.MOUSEMOTION:
                 if BotaoVerde.isOver(pos):
-                    BotaoVerde.color = (255,0,0)
-                else:
                     BotaoVerde.color = (0,187,45)
+                else:
+                    BotaoVerde.color = (0,0,255)
     pygame.quit()
 
 main_menu()
