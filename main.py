@@ -3,11 +3,16 @@ import pygame
 import os
 import time
 import random
+from pygame import mixer
 pygame.font.init()
-
+pygame.mixer.init()
 WIDTH, HEIGHT = 700, 700
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Invasão ao planeta PI")
+
+# background music
+music = mixer.music.load("background.wav")
+pygame.mixer.music.play(-1)
 
 # Imagens - aliens
 RED_ALIEN = pygame.image.load(os.path.join("assets", "alien-red.png"))
@@ -25,6 +30,8 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 
 # Plano de fundo
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+
+
 
 
 #Botão inicial
@@ -205,6 +212,8 @@ def main():
     onda_inimigos = 5
     velocidade_inimigo = 2
 
+   
+
     player = Player(300, 575)
 
     clock = pygame.time.Clock()
@@ -212,6 +221,7 @@ def main():
     #Desenho do jogo
     def redraw_window():
         WIN.blit(BG, (0,0))
+
         #Texto
         lives_label = main_font.render(f"Invasões: {lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255,255,255))
@@ -274,6 +284,8 @@ def main():
         if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
         if keys[pygame.K_SPACE]: #atirar
+            bulletSound = mixer.Sound("laser.wav")
+            bulletSound.play()
             player.atirar()
 
         for inimigo in inimigos:
