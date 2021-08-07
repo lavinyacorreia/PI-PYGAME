@@ -202,11 +202,11 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 50)
     perdeu_font = pygame.font.SysFont("serif", 25)
 
-    velocidade_jogador = 6
+    velocidade_jogador = 7
     perdeu = False
     perdeu_conta = 0
 
-    laser_vel =5
+    laser_vel =7
     #aliens
     inimigos = []
     onda_inimigos = 5
@@ -283,6 +283,13 @@ def main():
             player.y -= velocidade_jogador
         if keys[pygame.K_DOWN] and player.y + velocidade_jogador + player.get_height() + 15<HEIGHT: #para baixo
             player.y += velocidade_jogador
+        
+        #Easter Egg - Caso o jogador pressionar 314 (pi) ao mesmo tempo -> vida aumenta
+        # Regra -> o jogador precisa ter metade ou menos da barra de vida.
+        if keys[pygame.K_3] and keys[pygame.K_1] and keys[pygame.K_4]: 
+            if player.health <= 50:
+                player.health = player.health + 5
+                
         if keys[pygame.K_SPACE]: #atirar
             bulletSound = mixer.Sound("laser.wav")
             bulletSound.play()
